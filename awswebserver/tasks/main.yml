@@ -1,0 +1,19 @@
+---
+# tasks file for awswebserver
+- name: install httpd
+  package:
+          name: httpd
+          state: present
+  become: yes
+
+- name: start httpd service
+  service:
+          name: httpd
+          state: started
+  become: yes
+
+- name: copy webpages to deploy
+  copy:
+          src: /root/ansible_training/index.html
+          dest: /var/www/html
+  become: yes

@@ -1,0 +1,24 @@
+- hosts: localhost
+  vars_files:
+          - <vault-name>.yml
+  tasks:
+          - name: Launch EC2 instance over AWSCloud
+            ec2:
+                    region: "ap-south-1"
+                    image: "<AMI ID>"                                # eg., ami-0e306788ff2473ccb
+                    instance_type: "t2.micro"
+                    count: 1
+                    vpc_subnet_id: "<Subnet ID assigned by AWS>"
+                    group_id: "<Security Group ID>"
+                    instance_tags:
+                            Name: "webserver"
+                            user: "ansible"
+                    key_name: "<key-pair>"
+                    assign_public_ip: yes
+                    state: present
+                    wait: yes
+                    aws_access_key: "{{ AWS_ACCESS_KEY }}"
+                    aws_secret_key: "{{ AWS_SECRET_KEY }}"
+            register: instn
+          - debug:
+                  var: instn.instances[0].public_ip
